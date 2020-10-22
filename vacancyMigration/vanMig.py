@@ -4,7 +4,7 @@ version:
 Author: sch
 Date: 2020-10-21 14:12:46
 LastEditors: sch
-LastEditTime: 2020-10-22 18:06:41
+LastEditTime: 2020-10-22 18:44:58
 '''
 import numpy as np
 from ase.visualize import view
@@ -110,20 +110,29 @@ class vacancyMigration1(object):
 
         # (2.1) 在layer3中，以某一原子找出相邻原子的大致距离
         sites_distance_sameplane = []
-        for i in self.layer3:
-            # 选取不同的中心原子layer3:16个(48~63号)，此处选择9号原子。 layer4:15个(64~78号)
-            sites_distance_sameplane.append(self.distances_bet_sites[center][i])
-        # 取 1 ，因为np.sort(self.sites_distance_sameplane)[0] = 0
+        if self.center in self.layer3:
+            for i in self.layer3:
+                # 选取不同的中心原子layer3:16个(48~63号)，此处选择9号原子。 layer4:15个(64~78号)
+                sites_distance_sameplane.append(self.distances_bet_sites[self.center][i])
+        if self.center in self.layer4:
+            for i in self.layer4:
+                sites_distance_sameplane.append(self.distances_bet_sites[self.center][i])
+        # 去除 1 ，因为np.sort(self.sites_distance_sameplane)[0] = 0
         self.nearest_criterion_sameplane = np.sort(sites_distance_sameplane)[1]
-        print("层内相邻原子间距为：", self.nearest_criterion_sameplane)
+        print("层内相邻原子间距为：", sites_distance_sameplane)
 
         # (2.2) 以相邻原子间距为判据，找出某原子的所有相邻原子
         self.nearest_sites_samelayer = []
-        for i in self.layer3:
-            #print(distances_bet_sites[55][i], nearest_criterion)
-            if (epsilon_criterion(x=self.distances_bet_sites[center][i], standard=self.nearest_criterion_sameplane, epsilon=epsilon)):
-                self.nearest_sites_samelayer.append(i)
-        #print("同层原子间距为：{}".format(self.nearest_criterion_sameplane))
+        if self.center in self.layer3:
+            for i in self.layer3:
+                #print(distances_bet_sites[55][i], nearest_criterion)
+                if (epsilon_criterion(x=self.distances_bet_sites[self.center][i], standard=self.nearest_criterion_sameplane, epsilon=epsilon)):
+                    self.nearest_sites_samelayer.append(i)
+        if self.center in self.layer4:
+            for i in self.layer4:
+                if (epsilon_criterion(x=self.distances_bet_sites[self.center][i], standard=self.nearest_criterion_sameplane, epsilon=epsilon)):
+                    self.nearest_sites_samelayer.append(i)
+        print("同层原子间距为：{}".format(self.nearest_criterion_sameplane))
         print('以编号为{}原子为中心，同层内最邻近原子为: '.format(center), self.nearest_sites_samelayer)
         return self.nearest_sites_samelayer
 
@@ -134,19 +143,29 @@ class vacancyMigration1(object):
         self.get_diffusion_layers()
         #print('\n')
 
-        # (3.1) 以layer3中某原子为中心，并寻找其在layer4中的最邻近原子
+        # (3.1) 以layer3中某原子为中心，并寻找其距layer4中的最邻近原子的距离
         sites_distance_diffplane = []
-        for i in self.layer4:
-            sites_distance_diffplane.append(self.distances_bet_sites[self.center][i])
+        
+        if self.center in self.layer3:
+            for i in self.layer4:
+                sites_distance_diffplane.append(self.distances_bet_sites[self.center][i])
+        if self.center in self.layer4:
+            for i in self.layer3:
+                sites_distance_diffplane.append(self.distances_bet_sites[self.center][i])
         self.nearest_criterion_diffplane = np.sort(sites_distance_diffplane)[1]
         #print(np.sort(sites_distance_diffplane))
 
         # (3.2) 以异层的相邻原子间距为判据，找出某原子的所有异层相邻原子
         self.nearest_sites_difflayer = []
-        for i in self.layer4:
-            #print(distances_bet_sites[55][i], nearest_criterion)
-            if (epsilon_criterion(x=self.distances_bet_sites[self.center][i], standard=self.nearest_criterion_diffplane, epsilon=epsilon)):
-                self.nearest_sites_difflayer.append(i)
+        if self.center in self.layer3:
+            for i in self.layer4:
+                #print(distances_bet_sites[55][i], nearest_criterion)
+                if (epsilon_criterion(x=self.distances_bet_sites[self.center][i], standard=self.nearest_criterion_diffplane, epsilon=epsilon)):
+                    self.nearest_sites_difflayer.append(i)
+        if self.center in self.layer4:
+            for i in self.layer3:
+                if (epsilon_criterion(x=self.distances_bet_sites[self.center][i], standard=self.nearest_criterion_diffplane, epsilon=epsilon)):
+                    self.nearest_sites_difflayer.append(i)
         print("异层原子间距为：{}".format(self.nearest_criterion_diffplane))
         print('以编号为{}原子为中心，异层间最邻近原子及异层为: '.format(self.center), self.nearest_sites_difflayer)
         return self.nearest_sites_difflayer
