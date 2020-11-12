@@ -15,6 +15,7 @@
             generate_structures: 根据vanMig.py输出的 python输出文件/positionOfVacancy 生成新结构（以数字命名的文件夹，其中的POSCAR为新生成的文件）
             generate_structures1: 根据vanMig.py输出的 python输出文件/positionOfVacancy 生成新结构（以数字命名的文件夹，其中的POSCAR.cif为新生成的文件）
                   note: 一个生成cif格式，一个生成POSCAR可直接用于VASP计算
+            input_files: 把vasp_input文件夹中的POTCAR、IONCAR、KPOINTS复制到每个结构的文件夹（以数字命名的文件夹）中
       （3）python输出文件（需要提交到集群上）: 程序的输出文件
             positionOfVacancy: 用于储存count次nsteps步扩散后，空位所在位置
             CONTCAR${num}: 新生成的带有氧空位的结构
