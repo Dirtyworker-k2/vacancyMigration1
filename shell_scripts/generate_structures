@@ -1,0 +1,36 @@
+###
+ # @Descripttion: 
+ # @version: 
+ # @Author: sch
+ # @Date: 2020-11-03 13:51:46
+ # @LastEditors: sch
+ # @LastEditTime: 2020-11-12 17:24:37
+### 
+#!/bin/bash
+
+# 复制n个原始的CONTCAR文件，用于生成带空位的结构
+for i in `seq 10`
+do
+	mkdir ./python输出文件/${i}
+	cp /Users/mac/Desktop/空位扩散\(MoS2结构\)/CONTCAR.cif  /Users/mac/Desktop/空位扩散\(MoS2结构\)/python输出文件/${i}/CONTCAR.cif
+done
+
+
+# 根据 'python输出文件/positionOfVacancy' 生成带空位的结构
+for i in `seq 10`
+do 
+	echo ${i}
+	cd "/Users/mac/Desktop/空位扩散(MoS2结构)/python输出文件/${i}"
+	# CONTCAR.cif是用于生成新结构的原始文件
+	# POSCAR.cif是本package生成的带空位的package
+	# row: "python输出文件/positionOfVacancy"的第i行的值为row
+	row=`cat "/Users/mac/Desktop/空位扩散(MoS2结构)/python输出文件/positionOfVacancy" | tail -n +${i} | head -n 1`
+	echo ${row}
+	row=$[$row+32]
+	touch POSCAR.cif
+	sed "${row}d" CONTCAR.cif > POSCAR.cif 
+	rm -f CONTCAR.cif
+	cd ..
+done
+
+rm -f POSCAR.cif

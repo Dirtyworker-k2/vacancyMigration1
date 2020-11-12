@@ -4,7 +4,7 @@ version:
 Author: sch
 Date: 2020-10-21 14:12:46
 LastEditors: sch
-LastEditTime: 2020-11-03 13:43:44
+LastEditTime: 2020-11-12 16:26:54
 '''
 import numpy as np
 from ase.visualize import view
@@ -193,7 +193,7 @@ class vacancyMigration1(object):
         print('\n')
         return self.center
 
-# 四、连续扩散count次nsteps步
+# 四、连续扩散count次nsteps步, 并生成相应文件夹
     def n_migrations(self, center=57, nsteps=5, count=10):
         # self.center_lst：单次扩散的空位位置
         # self.centers_lst：不同次扩散的空位位置
@@ -203,7 +203,7 @@ class vacancyMigration1(object):
         for i in range(self.count):
             center = self.migration_nsteps(center=self.center, nsteps=self.nsteps)
             self.centers_lst.append(center)
-        with open('/Users/mac/Desktop/空位扩散/vanMig输出/positionOfVacancy', 'w') as f:
+        with open('/Users/mac/Desktop/空位扩散/python输出文件/positionOfVacancy', 'w') as f:
             for i in self.centers_lst:
                 f.write(str(i) + '\n')
         return self.centers_lst
