@@ -6,14 +6,15 @@
              3.2 motion = vacancyMigration1(cifFile='输入一个cif文件的路径')   //CONTCAR、POSCAR可以用VESTA转化成cif格式
              3.3 motion.migration_nsteps(center=57, nsteps=5)    // center是空位初始位置，nsteps是扩散步数
              
-      （4）进入shell, 运行shell_scripts/generate_structures文件，生成带有空位的结构
+      （4）进入shell, 运行shell_scripts/generate_structures文件，生成带有空位的结构(以数字命名的文件夹，其中的POSCAR.cif为新生成的文件)
       
 
 # 文件夹介绍：
       （1）vacancyMigration: 主要的python程序（主程序：vanMig.py）
       （2）shell_scripts: 储存脚本，用于处理vanMig.py输出的结果
-            generate_structures: 根据vanMig.py输出的 python输出文件/positionOfVacancy 生成新结构
+            generate_structures: 根据vanMig.py输出的 python输出文件/positionOfVacancy 生成新结构（以数字命名的文件夹，其中的POSCAR.cif为新生成的文件）
       （3）python输出文件: 程序的输出文件，
             positionOfVacancy: 用于储存count次nsteps步扩散后，空位所在位置
             CONTCAR${num}: 新生成的带有氧空位的结构
       （4）CONTCAR.cif: 完整的初始结构，新结构基于此结构生成
+           POSCAR.cif: 新生成的带有空位的结构
