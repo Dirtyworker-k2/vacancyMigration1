@@ -21,5 +21,5 @@
       （4）CONTCAR.cif（CONTCAR）: 完整的初始结构，新结构基于此结构生成
            POSCAR.cif（POSCAR）: 新生成的带有空位的结构
       （5）structures：扩散用到的结构--CONTCAR.cif 和 CONTCAR
-      （6）vasp_input: INCAR, KPOINTS, KPOINTS
+      （6）vasp_input（需要自己设置）: INCAR, KPOINTS, POTCAR
        (7) PBS_scripts: 在集群（10.251.0.28）上提交任务的脚本
